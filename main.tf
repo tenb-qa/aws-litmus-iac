@@ -1,21 +1,18 @@
-# Define the AWS provider
-provider "aws" {
-  region = "ca-central-1" # Change this to your desired region
-}
+provider "azurerm" {
+   features {}
+  }
 
-# Create a VPC
-resource "aws_vpc" "example_vpc" {
-  cidr_block = "10.0.0.0/16" # Adjust the CIDR block as needed
-  enable_dns_support = true
-  enable_dns_hostnames = true
-}
+resource "azurerm_mssql_server" "mysqlserverhb" {
+  name                         = "mysqlserverhb"
+  resource_group_name          = "cis_test"
+  location                     = "westeurope"
+  version                      = "12.0"
+  administrator_login          = "mradministrator"
+  administrator_login_password = "thisIsDog11"
 
-# Create two subnets in different Availability Zones
-resource "aws_subnet" "subnet_a" {
-  count = 2
-  vpc_id = aws_vpc.example_vpc.id
-  cidr_block = "10.0.${100 + count.index}.0/24" # Adjust the CIDR block as needed
-  availability_zone = "us-east-1a" # Change AZ as needed
+  tags = {
+    environment = "Demo"
+  }
 }
 
 # # Enable Flow Logs for the VPC
